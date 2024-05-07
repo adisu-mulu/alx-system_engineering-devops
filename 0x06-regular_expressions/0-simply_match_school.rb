@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
-pattern = /(School)/
+def match_pattern(args)
+  pattern = '(School)'
+  pattern.match(args)
+end
 
 args = ARGV[0]
 
-args.match(pattern)
+match_pattern(args)
