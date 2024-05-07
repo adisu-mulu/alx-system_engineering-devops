@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def match_pattern(args)
-  pattern = '(School)'
+  pattern = '(/School/)'
   pattern.match(args)
 end
 
