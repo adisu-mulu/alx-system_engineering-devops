@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-pattern = (School)
+pattern = /(School)/
 
 args = ARGV[0]
 
