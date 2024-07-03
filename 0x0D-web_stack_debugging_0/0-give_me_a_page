@@ -2,4 +2,4 @@
 # printing a page
 echo "Hello Holberton" > /var/www/html/index.html
 sudo service apache2 status
-service apache2 restart
+sudo service apache2 restart
