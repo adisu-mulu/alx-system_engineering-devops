@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 # printing a page
-echo "Hello Holberton" > /var/www/html/index.html
-sudo service apache2 status
-sudo service apache2 restart
+echo "ServerName localhost" >> /etc/apache2.conf
+service apache2 start
