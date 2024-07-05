@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#setting up a new ubuntu machine
+
+sudo apt-get update
+
+sudo apt-get install -y nginx
+
+sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sudo sed -i '/server_name example.com;/a \    location \/redirect_me \{\n        return 301 http:\/\/example.com\/new-page;\n    \}'
+
+sudo bash -c 'cat << EOF > /var/www/html/index.html
+Hello World!
+EOF'
+
+sudo service nginx restart
