@@ -4,9 +4,25 @@
 sudo apt-get update
 
 sudo apt-get install -y nginx
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-sudo sed -i '/server_name example.com;/a \    location \/redirect_me \{\n        return 301 http:\/\/example.com\/new-page;\n    \}'
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF'
 
 sudo bash -c 'cat << EOF > /var/www/html/index.html
 Hello World!
