@@ -13,7 +13,7 @@ echo "Hello World!" | sudo tee /var/www/html/index.html
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 
 # Update Nginx configuration to point to the /var/www/html directory and add redirect and custom 404 page
-sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+sudo bash -c 'cat > /etc/nginx/sites-enabled/default << EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -23,9 +23,6 @@ server {
 
     server_name _;
 
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
 
     location /redirect_me {
         return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
@@ -39,4 +36,4 @@ server {
 EOF'
 
 # Start nginx without using systemctl
-sudo service nginx start
+sudo service nginx restart
