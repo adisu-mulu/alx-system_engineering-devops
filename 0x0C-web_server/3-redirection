@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
-#setting up redirect
-STRING="Hello World!"
-REDIRECT="\n\tlocation /redirect_me {\n\t\treturn 301 https://youtu.be/dQw4w9WgXcQ; \n\t}\n"
-FILE="/etc/nginx/sites-available/default"
-sudo apt-get -y update
-sudo apt-get -y install nginx
-ufw allow 'Nginx HTTP'
-echo "$STRING" > /var/www/html/index.nginx-debian.html
-sudo sed -i "37i\ $REDIRECT" "$FILE"
+#setting up a new ubuntu machine
+
+sudo apt-get update
+
+sudo apt-get install -y nginx
+
+sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sudo sed -i '/server_name example.com;/a \    location \/redirect_me \{\n        return 301 http:\/\/example.com\/new-page;\n    \}'
+
+sudo bash -c 'cat << EOF > /var/www/html/index.html
+Hello World!
+EOF'
+
 sudo service nginx restart
