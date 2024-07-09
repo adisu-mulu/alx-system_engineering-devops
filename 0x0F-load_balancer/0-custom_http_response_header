@@ -1,44 +1,23 @@
 #!/usr/bin/env bash
-#adding response header to nginx
+# configures an Ubuntu machine with nginx
+FILE="/etc/nginx/sites-available/default"
+ERRORFILE="/usr/share/nginx/html/404error.html"
 
-sudo apt-get update -y
+REDIRECT="\n\tlocation /redirect_me {\n\t\treturn 301 https://youtu.be/dQw4w9WgXcQ;\n\t}\n"
+ERRORREDIRECT="\n\terror_page 404 /404error.html;\n\tlocation = /404error.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
+CUSTOMHEADER='\n\tadd_header X-Served-By $hostname;\n'
 
-# Install nginx
-sudo apt-get install nginx -y
+STRING="Hello World!"
+FOUR="Ceci n'est pas une page"
 
-# Create the index.html file with "Hello World!" content
-echo "Hello World!" | sudo tee /var/www/html/index.html
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "$STRING" > /var/www/html/index.nginx-debian.html
+sed -i "37i\ $REDIRECT" "$FILE"
 
-# Create the 404.html file with custom content
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+echo "$FOUR" > "$ERRORFILE"
+sed -i "37i\ $ERRORREDIRECT" "$FILE"
 
-# Update Nginx configuration to point to the /var/www/html directory and add redirect and custom 404 page
-sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html index.htm;
-
-    server_name _;
-
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    error_page 404 /404.html;
-    location = /404.html {
-        internal;
-    }
-}
-EOF'
-
-config_file="/etc/nginx/sites-available/default"
-hostname=$(hostname)
-header="add_header X-Served-By '$hostname';"
-
-sudo sed -i "/^server {/a \    $header" "$config_file"
-
-sudo service nginx restart
+sed -i "37i\ $CUSTOMHEADER" "$FILE"
+service nginx restart
