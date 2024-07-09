@@ -1,7 +1,39 @@
 #!/usr/bin/env bash
 #adding response header to nginx
 
-./1-install_nginx_web_server
+sudo apt-get update -y
+
+# Install nginx
+sudo apt-get install nginx -y
+
+# Create the index.html file with "Hello World!" content
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# Create the 404.html file with custom content
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+# Update Nginx configuration to point to the /var/www/html directory and add redirect and custom 404 page
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}
+EOF'
 
 config_file="/etc/nginx/sites-available/default"
 hostname=$(hostname)
