@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#adding response header to nginx
+
+./1-install_nginx_web_server
+
+config_file="/etc/nginx/sites-available/default"
+hostname=$(hostname)
+header="add_header X-Served-By '$hostname';"
+
+sudo sed -i "/^server {/a \    $header" "$config_file"
+
+sudo service nginx restart
