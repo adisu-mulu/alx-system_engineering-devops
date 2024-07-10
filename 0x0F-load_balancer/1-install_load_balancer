@@ -33,21 +33,17 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend http_front
-    bind *:80
-    stats uri /haproxy?stats
-    default_backend http_back
 
-backend http_back
+listen hbnb
+    bind 0.0.0.0:80
+    mode http
+    stats enable
+    stats uri /haproxy?stats
     balance roundrobin
+    option httpclose
+    option forwardfor
     server 196558-web-01 100.26.216.204:80 check
     server 196558-web-02 54.82.24.29:80 check
-
-listen stats
-    bind *:8080
-    stats enable
-    stats uri /stats
-    stats auth admin:password
 EOL
 
 service haproxy start
