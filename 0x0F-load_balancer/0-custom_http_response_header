@@ -37,6 +37,6 @@ EOF'
 config_file="/etc/nginx/sites-available/default"
 hostname=$(hostname)
 header="add_header X-Served-By \"$hostname\";"
-sudo sed -i "/^server {/a \    $header" "$config_file"
+sudo sed -i "/^ *server_name _;/a \    $header" "$config_file"
 
 sudo service nginx restart

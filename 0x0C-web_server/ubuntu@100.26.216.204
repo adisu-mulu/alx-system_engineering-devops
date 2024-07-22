@@ -4,7 +4,7 @@
 sudo apt-get update
 
 sudo apt-get install -y nginx
-sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/default
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -28,5 +28,4 @@ sudo bash -c 'cat << EOF > /var/www/html/index.html
 Hello World!
 EOF'
 
-sudo nginx -t
 sudo service nginx start
